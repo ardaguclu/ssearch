@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -28,12 +29,13 @@ func Listen(c context.Context, env *string) {
 	r.Use(customMiddleware())
 
 	r.GET("/search", handleSearch)
+	r.GET("/", handleHealth)
 
 	s := &http.Server{
 		Addr:         ":7981",
 		Handler:      r,
-		ReadTimeout:  60 * time.Second,
-		WriteTimeout: 60 * time.Second,
+		ReadTimeout:  15 * time.Minute,
+		WriteTimeout: 15 * time.Minute,
 	}
 
 	go func() {
@@ -71,12 +73,18 @@ func handleSearch(c *gin.Context) {
 		c.JSON(http.StatusBadRequest,
 			gin.H{
 				"status": http.StatusBadRequest,
-				"result": err,
+				"result": fmt.Sprintf("%+v", err),
 			})
 		return
 	}
 
 	c.JSON(http.StatusOK, results)
+}
+
+func handleHealth(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"status": http.StatusOK,
+	})
 }
 
 func customMiddleware() gin.HandlerFunc {

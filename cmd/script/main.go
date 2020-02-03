@@ -23,6 +23,8 @@ const (
 	S3Endpoint = "http://localhost:4572"
 )
 
+// script is used for development purposes. As a prerequisite localstack should be started
+// and 4572 port is open for S3 connection. Afterwards, this script populates sample data for being used.
 func main() {
 	sess := session.Must(session.NewSession(&aws.Config{
 		Credentials: credentials.NewStaticCredentials("foo", "var", ""),
@@ -31,15 +33,14 @@ func main() {
 	}))
 
 	c := s3.New(sess, &aws.Config{})
-	di := &s3.DeleteBucketInput{
-		Bucket: aws.String(BucketName),
-	}
 
-	c.DeleteBucket(di)
 	ci := &s3.CreateBucketInput{
 		Bucket: aws.String(BucketName),
 	}
-	c.CreateBucket(ci)
+	_, err := c.CreateBucket(ci)
+	if err != nil {
+		log.Fatalf("create bucket failed ", err)
+	}
 
 	uploader := s3manager.NewUploader(sess)
 
@@ -49,19 +50,26 @@ func main() {
 	}
 
 	for _, file := range files {
-		f, err := os.Open(TestDir + file.Name())
+		name := file.Name()
+		f, err := os.Open(TestDir + name)
 		if err != nil {
 			log.Fatalf("failed to open file %q, %v \n", file, err)
 		}
 
-		_, err = uploader.Upload(&s3manager.UploadInput{
+		if name == "example_3.json" {
+			name = "inner/example_3.json"
+		}
+
+		uploadresult, err := uploader.Upload(&s3manager.UploadInput{
 			Bucket: aws.String(BucketName),
-			Key:    aws.String(file.Name()),
+			Key:    aws.String(name),
 			Body:   f,
 		})
 		if err != nil {
 			log.Fatalf("failed to upload file, %v \n", err)
 		}
+
+		log.Println("file uploaded ", uploadresult.Location)
 	}
 
 	fmt.Println("test file upload is completed")
