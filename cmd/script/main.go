@@ -32,7 +32,7 @@ func main() {
 		Region:      aws.String(endpoints.EuWest1RegionID),
 	}))
 
-	c := s3.New(sess, &aws.Config{})
+	c := s3.New(sess)
 
 	ci := &s3.CreateBucketInput{
 		Bucket: aws.String(BucketName),
