@@ -68,6 +68,15 @@ func handleSearch(c *gin.Context) {
 		return
 	}
 
+	if len(req.Text) <= 3 {
+		c.JSON(http.StatusBadRequest,
+			gin.H{
+				"status": http.StatusBadRequest,
+				"result": "search text should be greater than 3",
+			})
+		return
+	}
+
 	results, err := srch.Start(ctx, req)
 	if err != nil {
 		c.JSON(http.StatusBadRequest,
@@ -78,6 +87,14 @@ func handleSearch(c *gin.Context) {
 		return
 	}
 
+	if results == nil {
+		c.JSON(http.StatusOK,
+			gin.H{
+				"status": http.StatusOK,
+				"result": "file contains search text not found",
+			})
+		return
+	}
 	c.JSON(http.StatusOK, results)
 }
 
