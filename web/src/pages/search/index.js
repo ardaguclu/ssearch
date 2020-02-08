@@ -11,13 +11,18 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import Modal from '@material-ui/core/Modal';
-//import "./style.css";
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import InsertDriveFileSharpIcon from '@material-ui/icons/InsertDriveFileSharp';
 
 const useStyles = makeStyles(theme => ({
   container: {
     display: 'flex',
     flexWrap: 'wrap',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: theme.palette.background.paper,
   },
   textField: {
     marginTop: theme.spacing(10),
@@ -98,38 +103,34 @@ function Search() {
     setOpen(true);
   };
 
+  const [items, setItems] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
-  const [success, setSuccess] = React.useState(false);
 
   const [selectedStartDate, handleStartDateChange] = useState(new Date());
   const [selectedEndDate, handleEndDateChange] = useState(new Date());
   const [maxCount, setMaxCount] = React.useState(20);
-  const [bucketName, setBucketName] = useState("");
-  const [filter, setFilter] = useState("");
-  const [modalTitle, setModalTitle] = useState("");
+  const [bucketName, setBucketName] = useState("Test");
+  const [filter, setFilter] = useState("Apple");
   const [modalDescription, setModalDescription] = useState("");
 
   const buttonClick = () => {
-    setSuccess(false);
     setLoading(true);
     fetch(`http://localhost:7981/search?bucket=${encodeURIComponent(bucketName)}&filter=${encodeURIComponent(filter)}&result-count=${encodeURIComponent(maxCount)}&start=${encodeURIComponent(Math.floor(selectedStartDate / 1000))}&end=${encodeURIComponent(Math.floor(selectedEndDate / 1000))}`)
         .then(response => {
-          if (!response.ok) {
-            throw new Error("HTTP status= " + response.status + "message = " + response.text());
-          }
           return response.json();
         })
         .then(json => {
-          console.log("Retrieved items:");
-          console.log(json);
+          if (json.status !== 200) {
+            throw Error(json.result);
+          }
+
+          setItems(json.result)
         })
         .catch(error => {
           setModalDescription(error.toString());
-          setModalTitle("Error");
           handleOpen();
         })
         .finally(() => {
-          setSuccess(true);
           setLoading(false);
         });
   };
@@ -206,19 +207,37 @@ function Search() {
       </Button>
       {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
     </div>
+      <div className="container">
+        <List component="nav" className={classes.root} aria-label="contacts">
+        {items.map(item => (
+            <ListItem alignItems="flex-start">
+              <ListItemIcon>
+                <InsertDriveFileSharpIcon />
+              </ListItemIcon>
+              <ListItemText primary={item.Key}
+                            secondary={
+                <React.Fragment>
+                  <InputLabel>Last Modified: {item.LastModified}</InputLabel>
+
+                  <InputLabel>Size: {item.Size} Byte</InputLabel>
+                </React.Fragment>
+              } />
+            </ListItem>
+        ))}
+        </List>
+      </div>
       <Modal
           open={open}
           onClose={handleClose}
       >
         <div style={modalStyle} className={classes.modalPaper}>
-          <h2 id="simple-modal-title">{modalTitle}</h2>
           <p id="simple-modal-description">
             {modalDescription}
           </p>
         </div>
       </Modal>
     </div>
-  );
+);
 }
 
 export default Search;

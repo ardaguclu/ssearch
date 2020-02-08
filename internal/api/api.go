@@ -90,14 +90,17 @@ func handleSearch(c *gin.Context) {
 	}
 
 	if results == nil {
-		c.JSON(http.StatusOK,
+		c.JSON(http.StatusBadRequest,
 			gin.H{
-				"status": http.StatusOK,
-				"result": "file contains search text not found",
+				"status": http.StatusBadRequest,
+				"result": "no file found",
 			})
 		return
 	}
-	c.JSON(http.StatusOK, results)
+	c.JSON(http.StatusOK, gin.H{
+		"status": http.StatusOK,
+		"result": results,
+	})
 }
 
 func handleHealth(c *gin.Context) {
