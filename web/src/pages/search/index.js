@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import clsx from 'clsx';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { green } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
@@ -11,19 +10,23 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import "./style.css";
+import Modal from '@material-ui/core/Modal';
+//import "./style.css";
 
 const useStyles = makeStyles(theme => ({
   container: {
     display: 'flex',
     flexWrap: 'wrap',
+    alignItems: 'center'
   },
   textField: {
+    marginTop: theme.spacing(10),
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
     width: 200,
   },
   searchTextField: {
+    marginTop: theme.spacing(10),
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
     width: 500,
@@ -32,13 +35,20 @@ const useStyles = makeStyles(theme => ({
    
   },
   selectFormControl: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
+    marginTop: theme.spacing(10),
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(2),
     minWidth: 200,
   },
-  buttonFormWrapper: {
-    margin: theme.spacing(1),
-    position: 'relative',
+  DatePicker: {
+    marginTop: theme.spacing(10),
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(2)
+  },
+  buttonStandard: {
+    marginTop: theme.spacing(10),
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(2)
   },
   buttonSuccess: {
     backgroundColor: green[500],
@@ -47,6 +57,7 @@ const useStyles = makeStyles(theme => ({
     },
   },
   buttonProgress: {
+    margin: theme.spacing(1),
     color: green[500],
     position: 'absolute',
     top: '50%',
@@ -54,49 +65,73 @@ const useStyles = makeStyles(theme => ({
     marginTop: -12,
     marginLeft: -12,
   },
+  modalPaper: {
+    position: 'absolute',
+    width: 400,
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
 }));
+
+function getModalStyle() {
+  const top = 50;
+  const left = 50;
+
+  return {
+    top: `${top}%`,
+    left: `${left}%`,
+    transform: `translate(-${top}%, -${left}%)`,
+  };
+}
 
 function Search() {
   const classes = useStyles();
 
+  const [modalStyle] = React.useState(getModalStyle);
+  const [open, setOpen] = React.useState(false);
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
   const [loading, setLoading] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
 
-  const buttonClassname = clsx({
-    [classes.buttonSuccess]: success,
-  });
-
-  const timer = React.useRef();
-  React.useEffect(() => {
-    return () => {
-      clearTimeout(timer.current);
-    };
-  }, []);
-
   const [selectedStartDate, handleStartDateChange] = useState(new Date());
   const [selectedEndDate, handleEndDateChange] = useState(new Date());
-  const [maxCount, setMaxCount] = React.useState(1);
+  const [maxCount, setMaxCount] = React.useState(20);
   const [bucketName, setBucketName] = useState("");
   const [filter, setFilter] = useState("");
+  const [modalTitle, setModalTitle] = useState("");
+  const [modalDescription, setModalDescription] = useState("");
 
   const buttonClick = () => {
-    if (!loading) {
-      setSuccess(false);
-      setLoading(true);
-      timer.current = setTimeout(() => {
-        setSuccess(true);
-        setLoading(false);
-      }, 2000);
-    }
-    /*setSuccess(false);
+    setSuccess(false);
     setLoading(true);
-    fetch("https://jsonplaceholder.typicode.com/todos/1")
-    .then(() => {
-      setSuccess(true);
-      setLoading(false);
-    })*/
-      //.then(response => response.json())
-      //.then(json => setTitle(json.title));
+    fetch(`http://localhost:7981/search?bucket=${encodeURIComponent(bucketName)}&filter=${encodeURIComponent(filter)}&result-count=${encodeURIComponent(maxCount)}&start=${encodeURIComponent(Math.floor(selectedStartDate / 1000))}&end=${encodeURIComponent(Math.floor(selectedEndDate / 1000))}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error("HTTP status= " + response.status + "message = " + response.text());
+          }
+          return response.json();
+        })
+        .then(json => {
+          console.log("Retrieved items:");
+          console.log(json);
+        })
+        .catch(error => {
+          setModalDescription(error.toString());
+          setModalTitle("Error");
+          handleOpen();
+        })
+        .finally(() => {
+          setSuccess(true);
+          setLoading(false);
+        });
   };
 
   const handleMaxCountChange = event => {
@@ -104,11 +139,12 @@ function Search() {
   };
 
   return (
-    <div className="main">
+    <div className="container">
     <div className="centered">
       <TextField
         id="searchText"
-        label="Filter"
+        label="Type the text you want to search in S3"
+        helperText="Required, len() > 3"
         className={classes.searchTextField}
         onChange={e => {
           setFilter(e.target.value);
@@ -116,7 +152,8 @@ function Search() {
       />
        <TextField
         id="bucket"
-        label="Bucket"
+        label="Bucket Name"
+        helperText="Required"
         className={classes.textField}
         onChange={e => {
           setBucketName(e.target.value);
@@ -137,36 +174,49 @@ function Search() {
           <MenuItem value={20}>20</MenuItem>
           <MenuItem value={50}>50</MenuItem>
           <MenuItem value={100}>100</MenuItem>
-          <MenuItem value={200}>200</MenuItem>
+          <MenuItem value={200}>500</MenuItem>
         </Select>
     </FormControl>
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <DateTimePicker 
+      className={classes.DatePicker}
       value={selectedStartDate} 
+      helperText="Optional"
       onChange={handleStartDateChange} 
       id="start"
-        label="Start(Optional)"/>
+        label="Start"/>
     </MuiPickersUtilsProvider>
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <DateTimePicker 
-      value={selectedEndDate} 
+      className={classes.DatePicker}
+      value={selectedEndDate}
+      helperText="Optional" 
       onChange={handleEndDateChange} 
       id="end"
-        label="End(Optional)"/>
+        label="End"/>
     </MuiPickersUtilsProvider>
-    <div className={classes.buttonFormWrapper}>
-      <Button 
+    <Button 
       variant="contained" 
       color="primary" 
       size="large" 
-      className={buttonClassname}
+      className={classes.buttonStandard}
       disabled={loading}
       onClick={buttonClick}>
         Search
       </Button>
-      {loading && <CircularProgress size={24} />}
-      </div>
+      {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
     </div>
+      <Modal
+          open={open}
+          onClose={handleClose}
+      >
+        <div style={modalStyle} className={classes.modalPaper}>
+          <h2 id="simple-modal-title">{modalTitle}</h2>
+          <p id="simple-modal-description">
+            {modalDescription}
+          </p>
+        </div>
+      </Modal>
     </div>
   );
 }

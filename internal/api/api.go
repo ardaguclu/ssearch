@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"fmt"
+	"github.com/gin-contrib/cors"
 	"log"
 	"net/http"
 	"time"
@@ -25,6 +26,7 @@ func Listen(c context.Context, env *string) {
 	}
 
 	r := gin.New()
+	r.Use(cors.Default())
 	r.Use(gin.Recovery())
 	r.Use(customMiddleware())
 

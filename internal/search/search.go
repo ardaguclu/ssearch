@@ -108,11 +108,13 @@ func (s *S) search(ctx context.Context, contents []*s3.Object, req SReq) []s3.Ob
 	var lock sync.Mutex
 
 	for _, c := range contents {
-		if req.StartDate != 0 && req.StartDate > c.LastModified.Unix() {
-			continue
-		}
-		if req.EndDate != 0 && req.EndDate < c.LastModified.Unix() {
-			continue
+		if req.EndDate > req.StartDate {
+			if req.StartDate != 0 && req.StartDate > c.LastModified.Unix() {
+				continue
+			}
+			if req.EndDate != 0 && req.EndDate < c.LastModified.Unix() {
+				continue
+			}
 		}
 
 		if *c.Size > MaxAllowedFileSize {
