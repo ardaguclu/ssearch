@@ -33,7 +33,7 @@ type S struct {
 type SReq struct {
 	Bucket      string `form:"bucket" binding:"required"`
 	Text        string `form:"filter" binding:"required"`
-	ResultCount int    `form:"result-count"`
+	ResultCount int    `form:"result-count" binding:"required"`
 	StartDate   int64  `form:"start"`
 	EndDate     int64  `form:"end"`
 }
@@ -55,6 +55,10 @@ func NewS(env string) *S {
 		sess:       sess,
 		downloader: s3manager.NewDownloader(sess, func(d *s3manager.Downloader) { d.PartSize = S3DownloadPartSize }),
 	}
+}
+
+func (s *S) GetBuckets(ctx context.Context) error {
+	return nil
 }
 
 // Start starts search process with the given parameters.

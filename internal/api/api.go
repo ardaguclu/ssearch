@@ -31,6 +31,7 @@ func Listen(c context.Context, env *string) {
 	r.Use(customMiddleware())
 
 	r.GET("/search", handleSearch)
+	r.GET("/buckets", handleBuckets)
 	r.GET("/", handleHealth)
 
 	s := &http.Server{
@@ -60,12 +61,14 @@ func Listen(c context.Context, env *string) {
 }
 
 func handleSearch(c *gin.Context) {
+	start := time.Now()
 	var req *search.SReq
 	if err := c.ShouldBind(&req); err != nil || req == nil {
 		c.JSON(http.StatusBadRequest,
 			gin.H{
-				"status": http.StatusBadRequest,
-				"result": "bucket and filter parameters are required",
+				"status":  http.StatusBadRequest,
+				"result":  "bucket and filter parameters are required",
+				"elapsed": time.Now().Sub(start).String(),
 			})
 		return
 	}
@@ -73,8 +76,19 @@ func handleSearch(c *gin.Context) {
 	if len(req.Text) <= 3 {
 		c.JSON(http.StatusBadRequest,
 			gin.H{
-				"status": http.StatusBadRequest,
-				"result": "search text should be greater than 3",
+				"status":  http.StatusBadRequest,
+				"result":  "search text should be greater than 3",
+				"elapsed": time.Now().Sub(start).String(),
+			})
+		return
+	}
+
+	if req.Bucket == "" {
+		c.JSON(http.StatusBadRequest,
+			gin.H{
+				"status":  http.StatusBadRequest,
+				"result":  "bucket name is required",
+				"elapsed": time.Now().Sub(start).String(),
 			})
 		return
 	}
@@ -83,8 +97,9 @@ func handleSearch(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusBadRequest,
 			gin.H{
-				"status": http.StatusBadRequest,
-				"result": fmt.Sprintf("%+v", err),
+				"status":  http.StatusBadRequest,
+				"result":  fmt.Sprintf("%+v", err),
+				"elapsed": time.Now().Sub(start).String(),
 			})
 		return
 	}
@@ -92,14 +107,24 @@ func handleSearch(c *gin.Context) {
 	if results == nil {
 		c.JSON(http.StatusBadRequest,
 			gin.H{
-				"status": http.StatusBadRequest,
-				"result": "no file found",
+				"status":  http.StatusBadRequest,
+				"result":  "no file found",
+				"elapsed": time.Now().Sub(start).String(),
 			})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
+		"status":  http.StatusOK,
+		"result":  results,
+		"elapsed": time.Now().Sub(start).String(),
+	})
+}
+
+func handleBuckets(c *gin.Context) {
+	ctx := context.Background()
+	srch.GetBuckets(ctx)
+	c.JSON(http.StatusOK, gin.H{
 		"status": http.StatusOK,
-		"result": results,
 	})
 }
 

@@ -16,13 +16,13 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InsertDriveFileSharpIcon from '@material-ui/icons/InsertDriveFileSharp';
+import SSearchLogo from "../../img/logo_white_background.jpg";
 
 const useStyles = makeStyles(theme => ({
   container: {
     display: 'flex',
     flexWrap: 'wrap',
     alignItems: 'center',
-    backgroundColor: theme.palette.background.paper,
   },
   textField: {
     marginTop: theme.spacing(10),
@@ -37,7 +37,7 @@ const useStyles = makeStyles(theme => ({
     width: 500,
   },
   selectEmpty: {
-   
+
   },
   selectFormControl: {
     marginTop: theme.spacing(10),
@@ -78,6 +78,11 @@ const useStyles = makeStyles(theme => ({
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
+  logo: {
+    width: '25%',
+    alignItems: 'center',
+    marginLeft: theme.spacing(75),
+  }
 }));
 
 function getModalStyle() {
@@ -104,13 +109,14 @@ function Search() {
   };
 
   const [items, setItems] = React.useState([]);
+  const [elapsed, setElapsed] = React.useState("");
   const [loading, setLoading] = React.useState(false);
 
   const [selectedStartDate, handleStartDateChange] = useState(new Date());
   const [selectedEndDate, handleEndDateChange] = useState(new Date());
   const [maxCount, setMaxCount] = React.useState(20);
-  const [bucketName, setBucketName] = useState("Test");
-  const [filter, setFilter] = useState("Apple");
+  const [bucketName, setBucketName] = useState("");
+  const [filter, setFilter] = useState("");
   const [modalDescription, setModalDescription] = useState("");
 
   const buttonClick = () => {
@@ -124,9 +130,12 @@ function Search() {
             throw Error(json.result);
           }
 
-          setItems(json.result)
+          setItems(json.result);
+          setElapsed("search completed in " + json.elapsed);
         })
         .catch(error => {
+          setElapsed("");
+          setItems([]);
           setModalDescription(error.toString());
           handleOpen();
         })
@@ -141,6 +150,7 @@ function Search() {
 
   return (
     <div className="container">
+      <img className={classes.logo} src={SSearchLogo} />
     <div className="centered">
       <TextField
         id="searchText"
@@ -203,12 +213,12 @@ function Search() {
       className={classes.buttonStandard}
       disabled={loading}
       onClick={buttonClick}>
-        Search
+        Do It!
       </Button>
       {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
     </div>
       <div className="container">
-        <List component="nav" className={classes.root} aria-label="contacts">
+        <List component="nav" className={classes.root} aria-label="results">
         {items.map(item => (
             <ListItem alignItems="flex-start">
               <ListItemIcon>
@@ -219,17 +229,15 @@ function Search() {
                 <React.Fragment>
                   <InputLabel>Last Modified: {item.LastModified}</InputLabel>
 
-                  <InputLabel>Size: {item.Size} Byte</InputLabel>
+                  <InputLabel>Size: {item.Size} Bytes</InputLabel>
                 </React.Fragment>
               } />
             </ListItem>
         ))}
         </List>
+        <InputLabel>{elapsed}</InputLabel>
       </div>
-      <Modal
-          open={open}
-          onClose={handleClose}
-      >
+      <Modal open={open} onClose={handleClose}>
         <div style={modalStyle} className={classes.modalPaper}>
           <p id="simple-modal-description">
             {modalDescription}
