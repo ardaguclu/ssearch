@@ -23,7 +23,7 @@ export default function Footer() {
                     SSEARCH
                 </Link>{' '}
                 {new Date().getFullYear()}
-                {'.'}
+                {'. GNU GPL Licensed.'}
             </Typography>
         </div>
     );
