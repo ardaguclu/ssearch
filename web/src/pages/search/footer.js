@@ -3,21 +3,21 @@ import Link from "@material-ui/core/Link";
 import React from "react";
 
 var footerStyle = {
-    backgroundColor: "#F8F8F8",
-    borderTop: "1px solid #E7E7E7",
+    backgroundColor: "#3f51b5",
     textAlign: "center",
-    padding: "20px",
+    color: "#FFFFFF",
+    padding: "15px",
     position: "fixed",
     left: "0",
     bottom: "0",
-    height: "60px",
+    height: "20px",
     width: "100%",
 };
 
 export default function Footer() {
     return (
         <div style={footerStyle}>
-            <Typography variant="body2" color="textSecondary" align="center">
+            <Typography variant="body2" align="center">
                 {'Copyright © '}
                 <Link color="inherit" href="https://ssearch.xyz/">
                     SSEARCH

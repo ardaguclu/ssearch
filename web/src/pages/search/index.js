@@ -23,7 +23,7 @@ var elapsedStyle = {
   padding: "65px",
   position: "fixed",
   bottom: "0",
-  height: "65px",
+  height: "25px",
   width: "95%",
 };
 
@@ -127,6 +127,24 @@ function Search() {
   const [bucketName, setBucketName] = useState("Test");
   const [filter, setFilter] = useState("Apple");
   const [modalDescription, setModalDescription] = useState("");
+
+  /*fetch(`http://localhost:7981/buckets`)
+      .then(response => {
+        return response.json();
+      })
+      .then(json => {
+        if (json.status !== 200) {
+          throw Error(json.result);
+        }
+
+        alert(json.result)
+        //setBuckets(json.result);
+      })
+      .catch(error => {
+        setItems([]);
+        setModalDescription(error.toString());
+        handleOpen();
+      });*/
 
   const buttonClick = () => {
     setLoading(true);

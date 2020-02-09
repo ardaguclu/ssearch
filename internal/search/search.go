@@ -57,8 +57,23 @@ func NewS(env string) *S {
 	}
 }
 
-func (s *S) GetBuckets(ctx context.Context) error {
-	return nil
+func (s *S) GetBuckets(ctx context.Context) ([]string, error) {
+	c := s3.New(s.sess)
+
+	lbi := &s3.ListBucketsInput{}
+
+	lbo, err := c.ListBucketsWithContext(ctx, lbi, request.WithLogLevel(aws.LogDebugWithHTTPBody))
+
+	if err != nil {
+		return nil, err
+	}
+
+	var buckets []string
+	for _, b := range lbo.Buckets {
+		buckets = append(buckets, *b.Name)
+	}
+
+	return buckets, nil
 }
 
 // Start starts search process with the given parameters.

@@ -113,6 +113,7 @@ func handleSearch(c *gin.Context) {
 			})
 		return
 	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"status":  http.StatusOK,
 		"result":  results,
@@ -122,9 +123,20 @@ func handleSearch(c *gin.Context) {
 
 func handleBuckets(c *gin.Context) {
 	ctx := context.Background()
-	srch.GetBuckets(ctx)
+	results, err := srch.GetBuckets(ctx)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest,
+			gin.H{
+				"status": http.StatusBadRequest,
+				"result": fmt.Sprintf("%+v", err),
+			})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"status": http.StatusOK,
+		"result": results,
 	})
 }
 
