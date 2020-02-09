@@ -18,20 +18,29 @@ import ListItemText from '@material-ui/core/ListItemText';
 import InsertDriveFileSharpIcon from '@material-ui/icons/InsertDriveFileSharp';
 import SSearchLogo from "../../img/logo_white_background.jpg";
 
+var elapsedStyle = {
+  textAlign: "center",
+  padding: "65px",
+  position: "fixed",
+  bottom: "0",
+  height: "65px",
+  width: "95%",
+};
+
 const useStyles = makeStyles(theme => ({
   container: {
     display: 'flex',
     flexWrap: 'wrap',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   textField: {
-    marginTop: theme.spacing(10),
+    marginTop: theme.spacing(5),
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
     width: 200,
   },
   searchTextField: {
-    marginTop: theme.spacing(10),
+    marginTop: theme.spacing(5),
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
     width: 500,
@@ -40,18 +49,18 @@ const useStyles = makeStyles(theme => ({
 
   },
   selectFormControl: {
-    marginTop: theme.spacing(10),
+    marginTop: theme.spacing(5),
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
     minWidth: 200,
   },
   DatePicker: {
-    marginTop: theme.spacing(10),
+    marginTop: theme.spacing(5),
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2)
   },
   buttonStandard: {
-    marginTop: theme.spacing(10),
+    marginTop: theme.spacing(5),
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2)
   },
@@ -79,10 +88,10 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(2, 4, 3),
   },
   logo: {
-    width: '25%',
+    width: '15%',
     alignItems: 'center',
-    marginLeft: theme.spacing(75),
-  }
+    marginLeft: theme.spacing(1),
+  },
 }));
 
 function getModalStyle() {
@@ -115,8 +124,8 @@ function Search() {
   const [selectedStartDate, handleStartDateChange] = useState(new Date());
   const [selectedEndDate, handleEndDateChange] = useState(new Date());
   const [maxCount, setMaxCount] = React.useState(20);
-  const [bucketName, setBucketName] = useState("");
-  const [filter, setFilter] = useState("");
+  const [bucketName, setBucketName] = useState("Test");
+  const [filter, setFilter] = useState("Apple");
   const [modalDescription, setModalDescription] = useState("");
 
   const buttonClick = () => {
@@ -155,7 +164,6 @@ function Search() {
       <TextField
         id="searchText"
         label="Type the text you want to search in S3"
-        helperText="Required, len() > 3"
         className={classes.searchTextField}
         onChange={e => {
           setFilter(e.target.value);
@@ -164,7 +172,6 @@ function Search() {
        <TextField
         id="bucket"
         label="Bucket Name"
-        helperText="Required"
         className={classes.textField}
         onChange={e => {
           setBucketName(e.target.value);
@@ -176,7 +183,7 @@ function Search() {
           labelId="maxCount"
           id="maxCount"
           value={maxCount}
-        
+
           onChange={handleMaxCountChange}
           className={classes.selectEmpty}
         >
@@ -189,27 +196,25 @@ function Search() {
         </Select>
     </FormControl>
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <DateTimePicker 
+      <DateTimePicker
       className={classes.DatePicker}
-      value={selectedStartDate} 
-      helperText="Optional"
-      onChange={handleStartDateChange} 
+      value={selectedStartDate}
+      onChange={handleStartDateChange}
       id="start"
         label="Start"/>
     </MuiPickersUtilsProvider>
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <DateTimePicker 
+      <DateTimePicker
       className={classes.DatePicker}
       value={selectedEndDate}
-      helperText="Optional" 
-      onChange={handleEndDateChange} 
+      onChange={handleEndDateChange}
       id="end"
         label="End"/>
     </MuiPickersUtilsProvider>
-    <Button 
-      variant="contained" 
-      color="primary" 
-      size="large" 
+    <Button
+      variant="contained"
+      color="primary"
+      size="large"
       className={classes.buttonStandard}
       disabled={loading}
       onClick={buttonClick}>
@@ -227,15 +232,13 @@ function Search() {
               <ListItemText primary={item.Key}
                             secondary={
                 <React.Fragment>
-                  <InputLabel>Last Modified: {item.LastModified}</InputLabel>
-
-                  <InputLabel>Size: {item.Size} Bytes</InputLabel>
+                  <InputLabel>{item.LastModified}</InputLabel>
                 </React.Fragment>
               } />
             </ListItem>
         ))}
         </List>
-        <InputLabel>{elapsed}</InputLabel>
+        <InputLabel style={elapsedStyle}>{elapsed}</InputLabel>
       </div>
       <Modal open={open} onClose={handleClose}>
         <div style={modalStyle} className={classes.modalPaper}>
