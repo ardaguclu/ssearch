@@ -8,7 +8,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/ardaguclu/ssearch/internal/api"
+	"github.com/ardaguclu/ssearch/server/internal/api"
 )
 
 func main() {

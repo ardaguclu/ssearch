@@ -1,4 +1,4 @@
-module github.com/ardaguclu/ssearch
+module github.com/ardaguclu/ssearch/server
 
 go 1.13
 

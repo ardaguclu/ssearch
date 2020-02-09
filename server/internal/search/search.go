@@ -6,7 +6,7 @@ import (
 	"runtime"
 	"sync"
 
-	"github.com/ardaguclu/ssearch/internal/rabinkarp"
+	"github.com/ardaguclu/ssearch/server/internal/rabinkarp"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 
 	"github.com/aws/aws-sdk-go/aws/endpoints"

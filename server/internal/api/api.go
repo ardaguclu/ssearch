@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/ardaguclu/ssearch/internal/search"
+	"github.com/ardaguclu/ssearch/server/internal/search"
 
 	"github.com/gin-gonic/gin"
 )
