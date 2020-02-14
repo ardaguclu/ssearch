@@ -1,0 +1,22 @@
+version: "3.7"
+services:
+  # SSEARCH API
+  ssearch-api:
+    image: ardaguclu/ssearch-api:v0.9
+    ports:
+      - 7981
+    networks:
+      - backend
+  # SSEARCH UI
+  ssearch-ui:
+    image: ardaguclu/ssearch-ui:v0.9
+    ports:
+      - 7982
+    depends_on:
+      - ssearch-api
+    networks:
+      - frontend
+
+networks:
+  frontend:
+  backend:

@@ -1,4 +1,4 @@
-FROM golang:latest
+FROM golang:latest as ssearch-api
 LABEL maintainer="Arda Güçlü <ardaguclu@gmail.com>"
 WORKDIR /app
 COPY go.mod go.sum ./
