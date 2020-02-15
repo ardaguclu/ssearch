@@ -6,4 +6,4 @@ RUN go mod download
 COPY . .
 RUN go build -o main cmd/api/main.go
 EXPOSE 7981
-CMD ["./main"]
+CMD ["./main", "--env=prod"]
