@@ -1,6 +1,5 @@
 ![Image description](https://ssearch.xyz/assets/logo_white_background.jpg)
 
-
 [![Go Report Card](https://goreportcard.com/badge/github.com/ardaguclu/ssearch)](https://goreportcard.com/report/github.com/ardaguclu/ssearch)
 
 Ssearch is S3 search tool created for pawing files and finding the ones including search text in S3 buckets. 
@@ -68,7 +67,7 @@ It gives results retrieved from localstack S3 simulating AWS S3.
 
 ### DISCLAIMER & NOTES
 
-* If you use Ssearch from out of your VPC or in your VPC without defining S3 as an internal endpoint, for each use there will be additional data in/out cost
+* If you use Ssearch from out of your VPC or in your VPC without defining S3 as an internal endpoint, there will be additional data in/out cost
 like any other use case of S3 satisfying former conditions.
-* In 0.9.1 version, Ssearch skips files whose sizes are greater than 500mb or types are parquet. Lastly, it does not search in metadata.
-* In ongoing versions, these features will be added intermittently.
+* In 0.9.1 version, Ssearch skips files whose sizes are greater than 500mb or types are in parquet. Lastly, it does not search in metadata.
+* In ongoing versions, these features will be added preemptively.
