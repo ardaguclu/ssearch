@@ -10,13 +10,12 @@ Searching in S3 is a daunting challenge for developers. Thereby it has been impl
 
 * **Go's concurrency libraries are used efficiently.** 
 * **Rabin-Karp algorithm is used for searching in files**.
-* **React based UI provides elegance design for search operations.**
+* **React based UI provides elegant design for search operations.**
 
 ### REQUIREMENTS
 
 * You can use it anywhere as long as the environment you use has sufficient read roles accessing to S3. `AmazonS3ReadOnlyAccess` is a good example for this;
   
-  `{
        "Version": "2012-10-17",
        "Statement": [
            {
@@ -28,9 +27,8 @@ Searching in S3 is a daunting challenge for developers. Thereby it has been impl
                "Resource": "*"
            }
        ]
-   }`
  
- * If you would like to use EC2 setup remotely from your local machine, please be sure that 7981 and 7982 port 
+ * If you install Ssearch into EC2 and want to use it remotely from your local machine, please be sure that 7981 and 7982 port 
  numbers are allowed as inbound ports in Security Groups.
  * [docker](https://docs.docker.com/install/)
  * [docker-compose](https://docs.docker.com/compose/install/)
