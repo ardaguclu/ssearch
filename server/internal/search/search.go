@@ -25,11 +25,13 @@ const (
 	MaxObjectSizePerRequest = 1000
 )
 
+// S stores aws session specific details.
 type S struct {
 	sess       *session.Session
 	downloader *s3manager.Downloader
 }
 
+// SReq stores request informations and being used for paramteter binding.
 type SReq struct {
 	Bucket      string `form:"bucket" binding:"required"`
 	Text        string `form:"filter" binding:"required"`
@@ -48,7 +50,9 @@ func NewS(env string) *S {
 			Region:      aws.String(endpoints.EuWest1RegionID),
 		}))
 	} else {
-		sess = session.Must(session.NewSession(&aws.Config{}))
+		sess = session.Must(session.NewSessionWithOptions(session.Options{
+			SharedConfigState: session.SharedConfigEnable,
+		}))
 	}
 
 	return &S{
@@ -57,6 +61,7 @@ func NewS(env string) *S {
 	}
 }
 
+// GetBuckets returns bucket list belongs to the current session.
 func (s *S) GetBuckets(ctx context.Context) ([]string, error) {
 	c := s3.New(s.sess)
 

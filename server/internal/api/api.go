@@ -60,6 +60,7 @@ func Listen(c context.Context, env *string) {
 	}
 }
 
+// handleSearch searches in the S3 with the given parameters.
 func handleSearch(c *gin.Context) {
 	start := time.Now()
 	var req *search.SReq
@@ -121,6 +122,7 @@ func handleSearch(c *gin.Context) {
 	})
 }
 
+// handleBuckets returns list of buckets belongs to the current session
 func handleBuckets(c *gin.Context) {
 	ctx := context.Background()
 	results, err := srch.GetBuckets(ctx)
@@ -140,6 +142,7 @@ func handleBuckets(c *gin.Context) {
 	})
 }
 
+// handleHealth is the pulse of measuring the health of the system.
 func handleHealth(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"status": http.StatusOK,
