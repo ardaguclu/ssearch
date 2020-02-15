@@ -50,9 +50,9 @@ func NewS(env string) *S {
 			Region:      aws.String(endpoints.EuWest1RegionID),
 		}))
 	} else {
-		sess = session.Must(session.NewSessionWithOptions(session.Options{
-			SharedConfigState: session.SharedConfigEnable,
-		}))
+		sess = session.Must(session.NewSession(&aws.Config{
+			Region: aws.String("us-west-2")},
+		))
 	}
 
 	return &S{
