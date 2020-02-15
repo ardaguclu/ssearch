@@ -30,6 +30,8 @@ Searching in S3 is a daunting challenge for developers. Thereby it has been impl
        ]
    }`
  
+ * If you would like to use EC2 setup remotely from your local machine, please be sure that 7981 and 7982 port 
+ numbers are allowed as inbound ports in Security Groups.
  * [docker](https://docs.docker.com/install/)
  * [docker-compose](https://docs.docker.com/compose/install/)
 
@@ -65,10 +67,6 @@ Now, you can test your local environment calling directly from API;
 `curl -X GET 'http://localhost:7981/search?bucket=Test&filter=Apple&result-count=1'`
 
 It gives results retrieved from localstack S3 simulating AWS S3.
-
-#### HINT
-
-If you would like to use EC2 setup remotely from your local machine, please be sure that 7981 and 7982 port numbers are allowed as inbound ports in Security Groups.
 
 ### DISCLAIMER
 
