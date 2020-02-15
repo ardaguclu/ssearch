@@ -36,7 +36,7 @@ Searching in S3 is a daunting challenge for developers. Thereby it has been impl
 ### USAGE  
  After ensuring S3 read access on your environment, run the following commands;
  
- * `curl -0 https://downloads.ssearch.xyz/latest/docker-compose.yml`
+ * `curl https://downloads.ssearch.xyz/latest/docker-compose.yml --output docker-compose.yml`
  * `docker-compose up -d`
 
 Docker containers including API and UI will be started. You can start searching in S3 from the UI;
