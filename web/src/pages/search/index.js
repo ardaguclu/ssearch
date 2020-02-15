@@ -15,6 +15,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import Checkbox from "@material-ui/core/Checkbox";
 import InsertDriveFileSharpIcon from '@material-ui/icons/InsertDriveFileSharp';
 import SSearchLogo from "../../img/logo_white_background.jpg";
 
@@ -92,6 +93,11 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     marginLeft: theme.spacing(1),
   },
+  DateEnable: {
+    marginTop: theme.spacing(5),
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(2)
+  }
 }));
 
 function getModalStyle() {
@@ -117,6 +123,12 @@ function Search() {
     setOpen(true);
   };
 
+  const handleDateEnable= event => {
+    setDateEnabled(event.target.checked);
+    handleStartDateChange(new Date());
+    handleEndDateChange(new Date());
+  };
+
   const [items, setItems] = React.useState([]);
   const [elapsed, setElapsed] = React.useState("");
   const [loading, setLoading] = React.useState(false);
@@ -127,24 +139,7 @@ function Search() {
   const [bucketName, setBucketName] = useState("Test");
   const [filter, setFilter] = useState("Apple");
   const [modalDescription, setModalDescription] = useState("");
-
-  /*fetch(`http://localhost:7981/buckets`)
-      .then(response => {
-        return response.json();
-      })
-      .then(json => {
-        if (json.status !== 200) {
-          throw Error(json.result);
-        }
-
-        alert(json.result)
-        //setBuckets(json.result);
-      })
-      .catch(error => {
-        setItems([]);
-        setModalDescription(error.toString());
-        handleOpen();
-      });*/
+  const [dateEnabled, setDateEnabled] = useState(false);
 
   const buttonClick = () => {
     setLoading(true);
@@ -213,9 +208,18 @@ function Search() {
           <MenuItem value={200}>500</MenuItem>
         </Select>
     </FormControl>
+      <FormControl>
+        <Checkbox
+            className={classes.DateEnable}
+            checked={dateEnabled}
+            onChange={handleDateEnable}
+            color="primary"
+        />
+      </FormControl>
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <DateTimePicker
       className={classes.DatePicker}
+      disabled={!dateEnabled}
       value={selectedStartDate}
       onChange={handleStartDateChange}
       id="start"
@@ -224,6 +228,7 @@ function Search() {
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <DateTimePicker
       className={classes.DatePicker}
+      disabled={!dateEnabled}
       value={selectedEndDate}
       onChange={handleEndDateChange}
       id="end"
