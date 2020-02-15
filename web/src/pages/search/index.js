@@ -36,14 +36,14 @@ const useStyles = makeStyles(theme => ({
   },
   textField: {
     marginTop: theme.spacing(5),
-    marginLeft: theme.spacing(2),
-    marginRight: theme.spacing(2),
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
     width: 200,
   },
   searchTextField: {
     marginTop: theme.spacing(5),
-    marginLeft: theme.spacing(2),
-    marginRight: theme.spacing(2),
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
     width: 500,
   },
   selectEmpty: {
@@ -51,19 +51,19 @@ const useStyles = makeStyles(theme => ({
   },
   selectFormControl: {
     marginTop: theme.spacing(5),
-    marginLeft: theme.spacing(2),
-    marginRight: theme.spacing(2),
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
     minWidth: 200,
   },
   DatePicker: {
     marginTop: theme.spacing(5),
-    marginLeft: theme.spacing(2),
-    marginRight: theme.spacing(2)
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1)
   },
   buttonStandard: {
     marginTop: theme.spacing(5),
-    marginLeft: theme.spacing(2),
-    marginRight: theme.spacing(2)
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1)
   },
   buttonSuccess: {
     backgroundColor: green[500],
@@ -95,8 +95,8 @@ const useStyles = makeStyles(theme => ({
   },
   DateEnable: {
     marginTop: theme.spacing(5),
-    marginLeft: theme.spacing(2),
-    marginRight: theme.spacing(2)
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1)
   }
 }));
 
@@ -136,6 +136,7 @@ function Search() {
   const [selectedStartDate, handleStartDateChange] = useState(new Date());
   const [selectedEndDate, handleEndDateChange] = useState(new Date());
   const [maxCount, setMaxCount] = React.useState(20);
+  const [region, setRegion] = React.useState("eu-west-1");
   const [bucketName, setBucketName] = useState("Test");
   const [filter, setFilter] = useState("Apple");
   const [modalDescription, setModalDescription] = useState("");
@@ -170,6 +171,10 @@ function Search() {
     setMaxCount(event.target.value);
   };
 
+  const handleRegionChange = event => {
+    setRegion(event.target.value);
+  };
+
   return (
     <div className="container">
       <img className={classes.logo} src={SSearchLogo} />
@@ -190,6 +195,37 @@ function Search() {
           setBucketName(e.target.value);
         }}
       />
+      <FormControl className={classes.selectFormControl}>
+        <InputLabel id="region">Region</InputLabel>
+        <Select
+            labelId="region"
+            id="region"
+            value={region}
+
+            onChange={handleRegionChange}
+            className={classes.selectEmpty}
+        >
+          <MenuItem value={"us-east-2"}>US East (Ohio)</MenuItem>
+          <MenuItem value={"us-east-1"}>US East (N. Virginia)</MenuItem>
+          <MenuItem value={"us-west-1"}>US West (N. California)</MenuItem>
+          <MenuItem value={"us-west-2"}>US West (Oregon)</MenuItem>
+          <MenuItem value={"ap-east-1"}>Asia Pacific (Hong Kong)</MenuItem>
+          <MenuItem value={"ap-south-1"}>Asia Pacific (Mumbai)</MenuItem>
+          <MenuItem value={"ap-northeast-3"}>Asia Pacific (Osaka-Local)</MenuItem>
+          <MenuItem value={"ap-northeast-2"}>Asia Pacific (Seoul)</MenuItem>
+          <MenuItem value={"ap-southeast-1"}>Asia Pacific (Singapore)</MenuItem>
+          <MenuItem value={"ap-southeast-2"}>Asia Pacific (Sydney)</MenuItem>
+          <MenuItem value={"ap-northeast-1"}>Asia Pacific (Tokyo)</MenuItem>
+          <MenuItem value={"ca-central-1"}>Canada (Central)</MenuItem>
+          <MenuItem value={"eu-central-1"}>Europe (Frankfurt)</MenuItem>
+          <MenuItem value={"eu-west-1"}>Europe (Ireland)</MenuItem>
+          <MenuItem value={"eu-west-2"}>Europe (London)</MenuItem>
+          <MenuItem value={"eu-west-3"}>Europe (Paris)</MenuItem>
+          <MenuItem value={"eu-north-1"}>Europe (Stockholm)</MenuItem>
+          <MenuItem value={"me-south-1"}>Middle East (Bahrain)</MenuItem>
+          <MenuItem value={"sa-east-1"}>South America (São Paulo)</MenuItem>
+        </Select>
+      </FormControl>
           <FormControl className={classes.selectFormControl}>
     <InputLabel id="maxCount">Max Count</InputLabel>
     <Select

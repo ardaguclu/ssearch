@@ -3,10 +3,11 @@ package api
 import (
 	"context"
 	"fmt"
-	"github.com/gin-contrib/cors"
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/gin-contrib/cors"
 
 	"github.com/ardaguclu/ssearch/server/internal/search"
 
@@ -125,7 +126,7 @@ func handleSearch(c *gin.Context) {
 // handleBuckets returns list of buckets belongs to the current session
 func handleBuckets(c *gin.Context) {
 	ctx := context.Background()
-	results, err := srch.GetBuckets(ctx)
+	results, err := srch.GetBuckets(ctx, "eu-west-1")
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest,
