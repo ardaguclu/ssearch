@@ -66,7 +66,9 @@ Now, you can test your local environment calling directly from API;
 
 It gives results retrieved from localstack S3 simulating AWS S3.
 
-### DISCLAIMER
+### DISCLAIMER & NOTES
 
-If you use Ssearch from out of your VPC or in your VPC without defining S3 as an internal endpoint, for each use there will be additional data in/out cost
+* If you use Ssearch from out of your VPC or in your VPC without defining S3 as an internal endpoint, for each use there will be additional data in/out cost
 like any other use case of S3 satisfying former conditions.
+* In 0.9.1 version, Ssearch skips files whose sizes are greater than 500mb or types are parquet. Lastly, it does not search in metadata.
+* In ongoing versions, these features will be added intermittently.
