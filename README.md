@@ -1,9 +1,5 @@
 ![Image description](https://ssearch.xyz/assets/logo_white_background.jpg)
-
 [![Go Report Card](https://goreportcard.com/badge/github.com/ardaguclu/ssearch)](https://goreportcard.com/report/github.com/ardaguclu/ssearch)
-
-Ssearch is S3 search tool created for pawing files and finding the ones including search text in S3 buckets. 
-It's backend has been fully implemented in Go and UI in React.
 
 Searching in S3 is a daunting challenge for developers. Thereby it has been implemented most performant way to find the files as soon as possible.
 
