@@ -144,7 +144,7 @@ function Search() {
 
   const buttonClick = () => {
     setLoading(true);
-    fetch(`http://${window.location.hostname}:7981/search?bucket=${encodeURIComponent(bucketName)}&filter=${encodeURIComponent(filter)}&result-count=${encodeURIComponent(maxCount)}&start=${encodeURIComponent(Math.floor(selectedStartDate / 1000))}&end=${encodeURIComponent(Math.floor(selectedEndDate / 1000))}`)
+    fetch(`http://${window.location.hostname}:7981/search?bucket=${encodeURIComponent(bucketName)}&region=${encodeURIComponent(region)}&filter=${encodeURIComponent(filter)}&result-count=${encodeURIComponent(maxCount)}&start=${encodeURIComponent(Math.floor(selectedStartDate / 1000))}&end=${encodeURIComponent(Math.floor(selectedEndDate / 1000))}`)
         .then(response => {
           return response.json();
         })
