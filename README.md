@@ -1,12 +1,31 @@
 ![Image description](https://ssearch.xyz/assets/logo_white_background.jpg)
 [![Go Report Card](https://goreportcard.com/badge/github.com/ardaguclu/ssearch)](https://goreportcard.com/report/github.com/ardaguclu/ssearch)
 
-Searching in S3 is a daunting challenge for developers. Thereby it has been implemented most performant way to find the files as soon as possible. 
-According to the benchmark results, it searches in a bucket includes 1000 files within seconds.
+Searching in S3 is a daunting challenge for developers. Looking at the files one by one or trying to find a pattern to understand which files include the key you want to search is one of the lack features S3 team does not develop in order to protect S3's performance perfection.
+
+Thereby SSEARCH has been implemented most performant way to find the files as soon as possible only for this purpose. According to the benchmark results, it searches in a bucket includes 1000 files within seconds.
 
 * **Go's concurrency libraries are used efficiently.** 
 * **Rabin-Karp algorithm is used for searching in files**.
 * **React based UI provides elegant design for search operations.**
+
+### USAGE  
+
+Installation is pretty simple, after downloading the docker-compose file, only run it. You can start searching in your S3 buckets immediately.
+ 
+ * `curl https://downloads.ssearch.xyz/latest/docker-compose.yml --output docker-compose.yml`
+ * `docker-compose up -d`
+
+Two Docker containers, namely API and UI, will be started. You can start searching in S3 from the UI;
+
+`http://localhost:7982/` 
+
+![UI-EXAMPLE](https://ssearch.xyz/assets/ui-example.png)
+
+or directly from API;
+
+`http://localhost:7981/search?bucket={bucketName}&filter={searchText}&region={region}&result-count={20}&start={unixStartTimestamp}&end={unixEndTimestamp}`
+
 
 ### REQUIREMENTS
 
@@ -28,20 +47,6 @@ According to the benchmark results, it searches in a bucket includes 1000 files 
  numbers are allowed as inbound ports in Security Groups.
  * [docker](https://docs.docker.com/install/)
  * [docker-compose](https://docs.docker.com/compose/install/)
-
-### USAGE  
- After ensuring S3 read access on your environment, run the following commands;
- 
- * `curl https://downloads.ssearch.xyz/latest/docker-compose.yml --output docker-compose.yml`
- * `docker-compose up -d`
-
-Docker containers including API and UI will be started. You can start searching in S3 from the UI;
-
-`http://localhost:7982/` 
-
-or directly from API;
-
-`http://localhost:7981/search?bucket={bucketName}&filter={searchText}&region={region}&result-count={20}&start={unixStartTimestamp}&end={unixEndTimestamp}`
 
 ### HACKING & TESTING
 
